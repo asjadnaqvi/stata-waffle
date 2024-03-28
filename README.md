@@ -106,7 +106,7 @@ waffle white black asian indian
 And add additional cetgories:
 
 ```
-waffle white black asian indian, over(agecat)
+waffle white black asian indian, over(agecat) note("")
 ```
 
 <img src="/figures/waffle2.png" width="100%">
@@ -114,7 +114,7 @@ waffle white black asian indian, over(agecat)
 Above the higher category determines the relatively heights. But we can also adjust it by a normalizaing variable `normvar()` which in this case is the total population variable:
 
 ```
-waffle white black asian indian, over(agecat) normvar(total)
+waffle white black asian indian, over(agecat) normvar(total) note("")
 ```
 
 <img src="/figures/waffle3.png" width="100%">
@@ -123,7 +123,7 @@ waffle white black asian indian, over(agecat) normvar(total)
 We can also normalize each block local percentages of each category:
 
 ```
-waffle white black asian indian, over(agecat) percent
+waffle white black asian indian, over(agecat) percent note("")
 ```
 
 <img src="/figures/waffle4.png" width="100%">
@@ -131,24 +131,25 @@ waffle white black asian indian, over(agecat) percent
 And change the color palettes:
 
 ```
-waffle white black asian indian, over(agecat) normvar(total) palette(okabe)
+waffle white black asian indian, over(agecat) normvar(total) palette(okabe) note("")
 ```
 
 <img src="/figures/waffle5.png" width="100%">
 
 ```
 waffle white black asian indian, over(agecat) normvar(total) palette(okabe) ///
-note("") xsize(2) ysize(1)
+note("Graphs by race") xsize(2) ysize(1)
 ```
 
 <img src="/figures/waffle6.png" width="100%">
 
+### Marker symbols
 
 We can also fully customize the marker symbols and marker sizes:
 
 ```
 waffle white black asian indian, over(agecat) normvar(total) ///
-palette(okabe) msym(Oh triangle +) msize(1.5 1.8 2.2) ///
+palette(okabe) msym(triangle circle square) msize(1.5 1.6) ///
 note("") xsize(2) ysize(1)
 ```
 
@@ -159,11 +160,34 @@ This also works well if there is a single color, e.g. for black and white graphs
 
 ```
 waffle white black asian indian, over(agecat) normvar(total) ///
-palette(black) msym(Oh triangle +) msize(1.5 1.8 2.2) ///
+palette(black) msym(Oh triangle +) msize(1.8 1.5 2.4) ///
 note("") xsize(3) ysize(1)
 ```
 
 <img src="/figures/waffle8.png" width="100%">
+
+
+```
+waffle white black asian indian, over(agecat) normvar(total) ///
+palette(black) msym(Oh triangle +) msize(1.8 1.5 2.4) mlwid(0.5 0.2 0.5) ///
+note("") xsize(3) ysize(1)
+```
+
+<img src="/figures/waffle8_1.png" width="100%">
+
+
+```
+waffle white black asian indian, over(agecat) normvar(total) ///
+palette(black) msym(Oh triangle +) msize(1.8 1.5 2.4) mlwid(0.5 0.2 0.5) ///
+note("") xsize(3) ysize(1)	///
+legsize(3) subtitle(, size(4) pos(6) nobox) ndsym(circle) ndcolor(red) ndsize(0.1)
+```
+
+<img src="/figures/waffle8_2.png" width="100%">
+
+
+### Customize dots rows and columns
+
 
 ```
 waffle white black asian indian, over(agecat) normvar(total) palette(okabe) rowdots(10) note("") 
@@ -184,9 +208,12 @@ waffle white black asian indian, over(agecat) normvar(total) palette(okabe) rowd
 
 <img src="/figures/waffle11.png" width="100%">
 
+
+### Placements
+
 ```
 waffle white black asian indian, over(agecat) normvar(total) palette(okabe) rowdots(5) msize(3) ///
-note("") margin(large) 
+note("") margin(large)  
 ```
 
 <img src="/figures/waffle12.png" width="100%">
@@ -216,8 +243,8 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-waffle/issues) to rep
 ## Change log
 
 **v1.1 (XX Apr 2024)**
-- Fixed some bugs.
-- 
+- Rerelease with reworked code.
+
 
 **v1.0 (XXX)**
 - First release
