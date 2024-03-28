@@ -94,6 +94,8 @@ lab de agecat 1 "<15" 2 "15-64" 3 "> 65+"
 lab val agecat agecat
 ```
 
+Let's test the basic command:
+
 
 ```
 waffle white black asian indian
@@ -101,11 +103,15 @@ waffle white black asian indian
 
 <img src="/figures/waffle1.png" width="100%">
 
+And add additional cetgories:
+
 ```
 waffle white black asian indian, over(agecat)
 ```
 
 <img src="/figures/waffle2.png" width="100%">
+
+Above the higher category determines the relatively heights. But we can also adjust it by a normalizaing variable `normvar()` which in this case is the total population variable:
 
 ```
 waffle white black asian indian, over(agecat) normvar(total)
@@ -113,11 +119,16 @@ waffle white black asian indian, over(agecat) normvar(total)
 
 <img src="/figures/waffle3.png" width="100%">
 
+
+We can also normalize each block local percentages of each category:
+
 ```
 waffle white black asian indian, over(agecat) percent
 ```
 
 <img src="/figures/waffle4.png" width="100%">
+
+And change the color palettes:
 
 ```
 waffle white black asian indian, over(agecat) normvar(total) palette(okabe)
@@ -132,6 +143,9 @@ note("") xsize(2) ysize(1)
 
 <img src="/figures/waffle6.png" width="100%">
 
+
+We can also fully customize the marker symbols and marker sizes:
+
 ```
 waffle white black asian indian, over(agecat) normvar(total) ///
 palette(okabe) msym(Oh triangle +) msize(1.5 1.8 2.2) ///
@@ -139,6 +153,9 @@ note("") xsize(2) ysize(1)
 ```
 
 <img src="/figures/waffle7.png" width="100%">
+
+This also works well if there is a single color, e.g. for black and white graphs:
+
 
 ```
 waffle white black asian indian, over(agecat) normvar(total) ///
