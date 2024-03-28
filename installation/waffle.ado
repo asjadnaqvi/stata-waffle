@@ -1,13 +1,12 @@
 *! waffle v1.1 (Apr 2024)
 *! Asjad Naqvi and Jared Colston
 
-*v1.1 			: Re-release
-*v1.0 (Mar 2022): First release by Jared Colston
+*v1.1 (XX Apr 2024): Re-release
+*v1.0 (XX XXX 2022): First release by Jared Colston
 
 
-/* ToDo
+/* ToDos
 	* Sometimes the wrong graphs are drawn. might be due to an unstable sort.
-	* Pass variable labels to lagend.
 	* nolegend not working properly.
 */
 
@@ -21,8 +20,8 @@ version 15
 syntax varlist(numeric min=1) [if] [in], ///
 	[	///
 		by(passthru) over(varname) normvar(varname numeric) percent palette(string)  ///
-		ROWDots(real 20) COLDots(real 20) MSYMbol(string) MSize(string)	 ///
-		MISSSYMbol(string)  MISSSize(string) MISSColor(string)	///
+		ROWDots(real 20) COLDots(real 20) MSYMbol(string) MLWIDth(string) MSize(string)	 ///
+		NDSYMbol(string)  NDSize(string) NDColor(string)	///   // No Data = ND
 		cols(real 4) LEGPOSition(real 6) LEGCOLumns(real 4) LEGSize(real 2.2) NOLEGend margin(string) ///
 		aspect(numlist max=1 >0) xsize(passthru) ysize(passthru) 	///
 		title(passthru) subtitle(passthru) note(passthru) scheme(passthru) name(passthru) legend(passthru) saving(passthru) name(passthru)		/// 						// keep default options here
@@ -49,7 +48,8 @@ quietly {
 	
 	if "`over'" == ""	{
 		gen _over = 1 
-		local over _over 
+		local over _over
+		local ovswitch  = 1
 	}
 	
 	keep `varlist' `normvar' `over'
@@ -198,16 +198,17 @@ quietly {
 	
 	if "`msize'"   == "" 	local msize    0.8	
 	if "`msymbol'" == "" 	local msymbol square	
-		
-	if "`misssymbol'"	== "" 	local misssymbol square		
-	if "`misssize'"   	== "" 	local misssize 	0.5
+	if "`mlwidth'" == "" 	local mlwidth    0.05	
 	
-	if "`misscolor'" 	== "" 	{
+	if "`ndsymbol'"	== "" 	local ndsymbol square		
+	if "`ndsize'"   == "" 	local ndsize 	0.5
+	
+	if "`ndcolor'" 	== "" 	{
 		if "`normvar'" == "" {
-			local misscolor none
+			local ndcolor none
 		}
 		else {
-			local misscolor gs14
+			local ndcolor gs14
 		}
 	}
 	
@@ -225,8 +226,10 @@ quietly {
 	// dots
 	
 	local mlen : word count `msymbol' 
-	local slen : word count `msize' 
+	local slen : word count `msize'
+	local wlen : word count `mlwidth'
 	
+
 	levelsof _dot if _dot > 0, local(lvls)
 	foreach x of local lvls {
 		
@@ -236,17 +239,22 @@ quietly {
 		local c = min(`x', `slen')
 		local f : word `c' of `msize'
 		
+		local k = min(`x', `wlen')
+		local p : word `k' of `mlwidth'		
 		
 		colorpalette `palette', nograph	n(`items') `poptions'
-		local dots `dots' (scatter _y _x if _dot==`x', msize(`f') mcolor("`r(p`x')'")	msymbol(`a')) ///
+		local dots `dots' (scatter _y _x if _dot==`x',  msymbol(`a') msize(`f') mcolor("`r(p`x')'") mlwidth(`p') ) ///
 	
-		if "`nolegend'" == ""  {	
+		
+		// legend
 			local varn : label `over' `x'
 			local entries `" `entries' `x'  "`varn'"  "'
 			local mylegend legend(order("`entries'") pos(`legposition') size(`legsize') col(`legcolumns')) 
-		} 
+		 
 		
 	}
+	
+	
 	
 	
 	if "`nolegend'" != ""  {
@@ -254,18 +262,25 @@ quietly {
 		local mylegend legend(off)		
 	}	
 	
-	if "`over'" == ""  local legswitch legend(off)
+	if "`ovswitch'" == "1"  {
+		local legswitch legend(off)
+		local mylegend legend(off)
+	}
 	
+	*if "`note'" == "" local note note(" ")
 	
-	if "`aspect'" == "" local aspect = `coldots' / `rowdots'
+	if "`aspect'" == "" local aspect = `coldots' / `rowdots' // a good approximation
 	
 	if "`subtitle'" == "" local subtitle subtitle( , pos(6) size(2.5) nobox)
 	
-	if "`margin'" == "" local margin medium
+	*if "`margin'" == "" local margin medium
+	
+	
+	// draw the graph
 	
 	twoway ///
 		`dots' ///
-		(scatter _y _x if _dot==0, msize(`misssize') msymbol(`misssymbol') mcolor(`misscolor')) ///
+		(scatter _y _x if _dot==0, msize(`ndsize') msymbol(`ndsymbol') mcolor(`ndcolor')) ///
 			, ///
 			ytitle("") yscale(noline) ylabel(, nogrid) ///
 			xtitle("") xscale(noline) xlabel(, nogrid) ///
