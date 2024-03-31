@@ -1,5 +1,4 @@
-
-![waffle-1](https://github.com/asjadnaqvi/stata-waffle/assets/38498046/43b0aa06-726f-4f87-92b7-45c2fd653e79)
+![waffle_banner](https://github.com/asjadnaqvi/stata-waffle/assets/38498046/9aaba239-7774-4005-99d2-9f87b65235bc)
 
 ![StataMin](https://img.shields.io/badge/stata-2015-blue) ![issues](https://img.shields.io/github/issues/asjadnaqvi/stata-waffle) ![license](https://img.shields.io/github/license/asjadnaqvi/stata-waffle) ![Stars](https://img.shields.io/github/stars/asjadnaqvi/stata-waffle) ![version](https://img.shields.io/github/v/release/asjadnaqvi/stata-waffle) ![release](https://img.shields.io/github/release-date/asjadnaqvi/stata-waffle)
 
