@@ -2,7 +2,7 @@ cff-version: 1.2.0
 authors:
 - family-names: "Naqvi"
   given-names: "Asjad"
-- family-names: "Colsten"
+- family-names: "Colston"
   given-names: "Jared"
 title: "Stata package ``waffle''"
 version: 1.1
