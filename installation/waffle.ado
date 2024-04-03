@@ -1,15 +1,15 @@
-*! waffle v1.1 (Apr 2024)
+*! waffle v1.1 (04 Apr 2024)
 *! Asjad Naqvi and Jared Colston
 
-*v1.1 (XX Apr 2024): Re-release
-*v1.0 (XX XXX 2022): First release by Jared Colston
+*v1.1 (04 Apr 2024): Re-release. Allows wide and long form data.
+*v1.0 (01 Mar 2022): First release by Jared Colston
 
+* Code is based on the Waffle guide on Medium: https://medium.com/the-stata-guide/stata-graphs-waffle-charts-32afc7d6f6dd
 
-/* ToDos
-	* Sometimes the wrong graphs are drawn. might be due to an unstable sort.
-	* nolegend not working properly.
+/*
+TODO: ADD CHECKS
+
 */
-
 
 
 capture program drop waffle 
@@ -19,13 +19,11 @@ version 15
 
 syntax varlist(numeric min=1) [if] [in], ///
 	[	///
-		by(passthru) over(varname) normvar(varname numeric) percent palette(string)  ///
+		by(varname) over(varname) normvar(varname numeric) percent showpct format(string) palette(string)  ///
 		ROWDots(real 20) COLDots(real 20) MSYMbol(string) MLWIDth(string) MSize(string)	 ///
 		NDSYMbol(string)  NDSize(string) NDColor(string)	///   // No Data = ND
-		cols(real 4) LEGPOSition(real 6) LEGCOLumns(real 4) LEGSize(real 2.2) NOLEGend margin(string) ///
-		aspect(numlist max=1 >0) xsize(passthru) ysize(passthru) 	///
-		title(passthru) subtitle(passthru) note(passthru) scheme(passthru) name(passthru) legend(passthru) saving(passthru) name(passthru)		/// 						// keep default options here
-	]
+		cols(real 4) LEGPOSition(real 6) LEGCOLumns(real 4) LEGSize(string) NOLEGend margin(string) ///
+		aspect(numlist max=1 >0) note(passthru) subtitle(passthru) * 	]
 
 	
 	// check dependencies
@@ -52,37 +50,39 @@ quietly {
 		local ovswitch  = 1
 	}
 	
-	keep `varlist' `normvar' `over'
+	keep `varlist' `normvar' `over' `by'
 	
-	foreach x of local varlist {
-		local `x'_lab : var label `x'
+	local length : word count `varlist'
+	
+	if `length' > 1 {
+		foreach x of local varlist {
+			local `x'_lab : var label `x'
+		}
+		
+		collapse (sum) `varlist' `normvar', by(`over')
+
+		// flatten to long
+		foreach x of local varlist  {
+			ren `x' y_`x'
+		}	
+		
+		gen _i = _n
+		
+		reshape long y_, i(_i `over') j(_cats) string
+		
+		foreach x of  local varlist {
+			replace _cats = "``x'_lab'" if _cats=="`x'"
+		}		
+		
 	}
-	
-	
-	
-	collapse (sum) `varlist' `normvar', by(`over')
-
-
-	
-	
-	
-	// flatten to long
-	foreach x of local varlist  {
-		ren `x' y_`x'
+	if `length' == 1 {	
+		
+		
+		cap ren `by' _cats
+		collapse (sum) `varlist' `normvar', by(_cats `over')
+		
+		cap ren `varlist' y_
 	}	
-	
-
-	gen _i = _n
-	
-
-	reshape long y_, i(_i `over') j(_cats) string
-	
-	foreach x of  local varlist {
-		*label variable  `x' "``x'_lab'"
-		replace _cats = "``x'_lab'" if _cats=="`x'"
-	}		
-	
-	
 	
 	
 	sort _cats `over'
@@ -127,14 +127,15 @@ quietly {
 	
 
 	egen _tag = tag(_grp)
-		
+	
+	bysort _cats: egen double _share_tot = sum(_share)
+	
+	
 	local obsv = `rowdots' * `coldots'  // calculate the total number of rows per group
-
 	
 	expand `obsv' if _tag==1, gen(_control)	
-	
-	
-	sort _grp _cats 
+		
+	sort _grp  _cats _control `over'
 	
 	
 	bysort _grp:	egen _y = seq(), b(`rowdots')  
@@ -147,21 +148,22 @@ quietly {
 	
 	gen _dot = 0 
 	
-	
+	egen _tag2 = tag(_grp `over')
+	egen _tag3 = group(`over')
 	
 	levelsof _grp, local(lvls)
-	levelsof `over', local(ovrs)
+	levelsof _tag3, local(ovrs)
 	
 	local items = r(r)
-	
-	
+
+
 	foreach x of local lvls {
 		
 		local start = 1
 		local counter = 1
 		
 		foreach y of local ovrs {
-			summ _share if _grp==`x' & `over'==`y' , meanonly
+			summ _share if _grp==`x' & _tag3==`y' & _tag2==1, meanonly
 			local share = r(mean)
 			
 			
@@ -175,34 +177,52 @@ quietly {
 			local start = `end' + 1
 			local ++counter
 		}
-		
-		
+	}	
+	
+	
+	cap confirm numeric var _cats
+	if !_rc {
+		decode _cats, gen(_temp)
+	}
+	else {
+		gen _temp = _cats
+	}
+	
+	
+	if "`format'"  == "" {
+		if "`showpct'"  == "" {
+			local format %15.0fc
+		}
+		else {
+			local format %6.2f
+		}
 	}		
 	
 	
-	
-	
-	egen _tag2 = tag(_grp `over')
 	gen _label = ""
+
+	if "`showpct'" == "" {
+		levelsof _grp, local(lvls)
 	
-	levelsof _grp, local(lvls)
-	foreach x of local lvls {
-	
-		summ _val if _grp==`x' & _tag2==1, meanonly
-		
-		replace _label = _cats + " (" + string(r(sum), "%15.0fc") + ")"	if _grp==`x'
+		foreach x of local lvls {
+			summ _val if _grp==`x' & _tag2==1, meanonly
+			replace _label = _temp + " (" + string(r(sum), "`format'") + ")"	if _grp==`x'
+		}
 	}
+	else {
+		replace _label = _temp + " (" + string(_share_tot * 100, "`format'") + "%)"	
+	}
+	
+
 
 	
+	drop _i _control _temp
 	
-	
-	if "`msize'"   == "" 	local msize    0.8	
+	if "`msize'"   == "" 	local msize    0.85	
 	if "`msymbol'" == "" 	local msymbol square	
 	if "`mlwidth'" == "" 	local mlwidth    0.05	
-	
 	if "`ndsymbol'"	== "" 	local ndsymbol square		
 	if "`ndsize'"   == "" 	local ndsize 	0.5
-	
 	if "`ndcolor'" 	== "" 	{
 		if "`normvar'" == "" {
 			local ndcolor none
@@ -211,7 +231,6 @@ quietly {
 			local ndcolor gs14
 		}
 	}
-	
 	
 	if "`palette'" == "" {
 		local palette tableau
@@ -223,7 +242,11 @@ quietly {
 	}
 	
 	
+	if "`legsize'"   == "" 	local legsize 2.2	
+	
 	// dots
+
+	levelsof `over', local(ovlvls)
 	
 	local mlen : word count `msymbol' 
 	local slen : word count `msize'
@@ -247,16 +270,24 @@ quietly {
 	
 		
 		// legend
+		
+		capture confirm numeric variable `over'
+		if !_rc {	
 			local varn : label `over' `x'
 			local entries `" `entries' `x'  "`varn'"  "'
+		}
+		else {
+			local varn : word `x' of `ovlvls'
+			local entries `" `entries' `x'  "`varn'"  "'
+		}
+			
 			local mylegend legend(order("`entries'") pos(`legposition') size(`legsize') col(`legcolumns')) 
 		 
 		
 	}
 	
 	
-	
-	
+
 	if "`nolegend'" != ""  {
 		local legswitch legend(off)
 		local mylegend legend(off)		
@@ -267,13 +298,9 @@ quietly {
 		local mylegend legend(off)
 	}
 	
-	*if "`note'" == "" local note note(" ")
 	
 	if "`aspect'" == "" local aspect = `coldots' / `rowdots' // a good approximation
-	
 	if "`subtitle'" == "" local subtitle subtitle( , pos(6) size(2.5) nobox)
-	
-	*if "`margin'" == "" local margin medium
 	
 	
 	// draw the graph
@@ -288,8 +315,7 @@ quietly {
 			by(_label, `title' `note' rows(`rows') cols(`cols') imargin(`margin') `legswitch' ) ///
 			`subtitle' ///
 			`mylegend'	///
-				aspect(`aspect') `xsize' `ysize'	///
-				`saving' `name' `scheme'
+				aspect(`aspect') `options'	
 						
 	
 	
@@ -301,6 +327,6 @@ end
 
 
 
-
+*************************
 **** END OF PROGRAM *****
-
+*************************
