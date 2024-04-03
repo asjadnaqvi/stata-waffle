@@ -11,7 +11,7 @@
 # waffle v1.1
 (04 Apr 2024)
 
-This package provides the ability to draw waffles Stata. It is based on the [waffle plots](https://medium.com/the-stata-guide/stata-graphs-waffle-plots-613808b51f73) guide on Medium.
+This package provides the ability to draw waffles Stata. It is based on the [Waffle plots](https://medium.com/the-stata-guide/stata-graphs-waffle-plots-613808b51f73) guide on Medium.
 
 The package is still beta and is being constantly improved. It might still be missing checks and features. 
 
