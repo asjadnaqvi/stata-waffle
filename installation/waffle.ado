@@ -22,8 +22,8 @@ syntax varlist(numeric min=1) [if] [in], ///
 		by(varname) over(varname) normvar(varname numeric) percent showpct format(string) palette(string)  ///
 		ROWDots(real 20) COLDots(real 20) MSYMbol(string) MLWIDth(string) MSize(string)	 ///
 		NDSYMbol(string)  NDSize(string) NDColor(string)	///   // No Data = ND
-		cols(real 4) LEGPOSition(real 6) LEGCOLumns(real 4) LEGSize(string) NOLEGend margin(string) ///
-		aspect(numlist max=1 >0) note(passthru) subtitle(passthru) * 	]
+		COLs(real 4) LEGPOSition(real 6) LEGCOLumns(real 4) LEGSize(string) NOLEGend margin(string) ///
+		aspect(numlist max=1 >0) note(passthru) title(passthru) subtitle(passthru) * 	]
 
 	
 	// check dependencies
@@ -52,6 +52,11 @@ quietly {
 	
 	keep `varlist' `normvar' `over' `by'
 	
+	
+	
+	
+	
+	
 	local length : word count `varlist'
 	
 	if `length' > 1 {
@@ -77,12 +82,28 @@ quietly {
 	}
 	if `length' == 1 {	
 		
-		
 		cap ren `by' _cats
-		collapse (sum) `varlist' `normvar', by(_cats `over')
+		
+		if "`normvar'"=="" {
+			collapse (sum) `varlist', by(_cats `over')
+		}
+		else {
+			collapse (sum) `varlist' (mean) `normvar', by(_cats `over')
+		}
+		
+		/*
+		capture confirm variable `over'
+		if !_rc {
+			drop if `over'==""
+		}
+		else {
+			drop if `over'==.
+		}
+		*/	
 		
 		cap ren `varlist' y_
 	}	
+	
 	
 	
 	sort _cats `over'
@@ -102,11 +123,18 @@ quietly {
 		}
 	}
 	else {
-		summ `normvar' if _grp==1, meanonly
-		local max = r(sum)		
-	
-		drop `normvar'
+		
+		levelsof _grp, local(lvls)
+		
+		foreach x of local lvls {
+			summ `normvar' if _grp==`x', meanonly
+			if r(max) > `max' local max = r(max)
+		}
+		
+		*drop `normvar'
 	}
+	
+
 	
 		
 	gen double _share = .
@@ -218,11 +246,12 @@ quietly {
 	
 	drop _i _control _temp
 	
-	if "`msize'"   == "" 	local msize    0.85	
-	if "`msymbol'" == "" 	local msymbol square	
-	if "`mlwidth'" == "" 	local mlwidth    0.05	
-	if "`ndsymbol'"	== "" 	local ndsymbol square		
-	if "`ndsize'"   == "" 	local ndsize 	0.5
+	if "`msize'"   == "" 	local msize		0.85	
+	if "`msymbol'" == "" 	local msymbol	square	
+	if "`mlwidth'" == "" 	local mlwidth	0.05	
+	if "`ndsymbol'"	== "" 	local ndsymbol	square		
+	if "`ndsize'"   == "" 	local ndsize	0.5
+	
 	if "`ndcolor'" 	== "" 	{
 		if "`normvar'" == "" {
 			local ndcolor none
