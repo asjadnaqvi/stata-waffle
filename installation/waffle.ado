@@ -22,7 +22,7 @@ syntax varlist(numeric min=1) [if] [in], ///
 		by(varname) over(varname) normvar(varname numeric) percent showpct format(string) palette(string)  ///
 		ROWDots(real 20) COLDots(real 20) MSYMbol(string) MLWIDth(string) MSize(string)	 ///
 		NDSYMbol(string)  NDSize(string) NDColor(string)	///   // No Data = ND
-		COLs(real 4) LEGPOSition(real 6) LEGCOLumns(real 4) LEGSize(string) NOLEGend margin(string) ///
+		COLs(real 4) LEGPOSition(string) LEGCOLumns(real 4) LEGSize(string) NOLEGend margin(string) ///
 		aspect(numlist max=1 >0) note(passthru) title(passthru) subtitle(passthru) * 	]
 
 	
@@ -246,11 +246,12 @@ quietly {
 	
 	drop _i _control _temp
 	
-	if "`msize'"   == "" 	local msize		0.85	
-	if "`msymbol'" == "" 	local msymbol	square	
-	if "`mlwidth'" == "" 	local mlwidth	0.05	
-	if "`ndsymbol'"	== "" 	local ndsymbol	square		
-	if "`ndsize'"   == "" 	local ndsize	0.5
+	if "`msize'"   		== "" 	local msize		0.85	
+	if "`msymbol'" 		== "" 	local msymbol	square	
+	if "`mlwidth'" 		== "" 	local mlwidth	0.05	
+	if "`ndsymbol'"		== "" 	local ndsymbol	square		
+	if "`ndsize'"   	== "" 	local ndsize	0.5
+	if "`legposition'"  == "" 	local legposition	6
 	
 	if "`ndcolor'" 	== "" 	{
 		if "`normvar'" == "" {
@@ -310,7 +311,7 @@ quietly {
 			local entries `" `entries' `x'  "`varn'"  "'
 		}
 			
-			local mylegend legend(order("`entries'") pos(`legposition') size(`legsize') col(`legcolumns')) 
+			local mylegend legend(order("`entries'") position(`legposition') size(`legsize') col(`legcolumns')) 
 		 
 		
 	}
@@ -340,7 +341,7 @@ quietly {
 			, ///
 			ytitle("") yscale(noline) ylabel(, nogrid) ///
 			xtitle("") xscale(noline) xlabel(, nogrid) ///
-			by(, noiyaxes noixaxes noiytick noixtick noiylabel noixlabel) ///
+			by(, noiyaxes noixaxes noiytick noixtick noiylabel noixlabel legend(position(`legposition'))	 ) ///
 			by(_label, `title' `note' rows(`rows') cols(`cols') imargin(`margin') `legswitch' ) ///
 			`subtitle' ///
 			`mylegend'	///
