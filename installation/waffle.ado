@@ -88,18 +88,9 @@ quietly {
 			collapse (sum) `varlist', by(_cats `over')
 		}
 		else {
-			collapse (sum) `varlist' (mean) `normvar', by(_cats `over')
+			collapse (sum) `varlist' (sum) `normvar', by(_cats `over')
 		}
 		
-		/*
-		capture confirm variable `over'
-		if !_rc {
-			drop if `over'==""
-		}
-		else {
-			drop if `over'==.
-		}
-		*/	
 		
 		cap ren `varlist' y_
 	}	
@@ -123,22 +114,17 @@ quietly {
 		}
 	}
 	else {
-		
 		levelsof _grp, local(lvls)
 		
 		foreach x of local lvls {
 			summ `normvar' if _grp==`x', meanonly
-			if r(max) > `max' local max = r(max)
+			if r(sum) > `max' local max = r(sum)
 		}
 		
 		*drop `normvar'
 	}
-	
 
-	
-		
 	gen double _share = .
-
 
 	if "`percent'" == "" {
 		replace _share = _val / `max' // if _grp==`x'  & `over'==`y'
@@ -151,6 +137,7 @@ quietly {
 		}
 		
 	}
+	
 	
 	
 
@@ -317,6 +304,8 @@ quietly {
 	}
 	
 	
+	if "`ovswitch'" != "1" local myleg2 legend(position(`legposition'))
+	
 
 	if "`nolegend'" != ""  {
 		local legswitch legend(off)
@@ -341,7 +330,7 @@ quietly {
 			, ///
 			ytitle("") yscale(noline) ylabel(, nogrid) ///
 			xtitle("") xscale(noline) xlabel(, nogrid) ///
-			by(, noiyaxes noixaxes noiytick noixtick noiylabel noixlabel legend(position(`legposition'))	 ) ///
+			by(, noiyaxes noixaxes noiytick noixtick noiylabel noixlabel `myleg2'	 ) ///
 			by(_label, `title' `note' rows(`rows') cols(`cols') imargin(`margin') `legswitch' ) ///
 			`subtitle' ///
 			`mylegend'	///
