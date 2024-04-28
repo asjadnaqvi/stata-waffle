@@ -52,11 +52,7 @@ quietly {
 	
 	keep `varlist' `normvar' `over' `by'
 	
-	
-	
-	
-	
-	
+
 	local length : word count `varlist'
 	
 	if `length' > 1 {
@@ -96,7 +92,6 @@ quietly {
 	}	
 	
 	
-	
 	sort _cats `over'
 	ren y_ _val
 		
@@ -133,12 +128,11 @@ quietly {
 		levelsof _grp, local(lvls)
 		foreach x of local lvls {
 			summ _val if _grp==`x', meanonly
+						
 			replace _share = _val / r(sum) if _grp==`x' 
 		}
 		
 	}
-	
-	
 	
 
 	egen _tag = tag(_grp)
@@ -170,7 +164,7 @@ quietly {
 	levelsof _tag3, local(ovrs)
 	
 	local items = r(r)
-
+	
 
 	foreach x of local lvls {
 		
@@ -178,21 +172,28 @@ quietly {
 		local counter = 1
 		
 		foreach y of local ovrs {
+					
 			summ _share if _grp==`x' & _tag3==`y' & _tag2==1, meanonly
 			local share = r(mean)
 			
+			if `r(N)' > 0 {
 			
-			summ _id  if _grp==`x', meanonly
-			local gap = int(`share' * `r(max)')
+				summ _id  if _grp==`x', meanonly
 			
-			local end = `start' + `gap'
 			
-			qui replace _dot = `counter' if _grp==`x' & inrange(_id, `start', `end') 
-			
-			local start = `end' + 1
-			local ++counter
+				local gap = int(`share' * `r(max)')
+				
+				local end = `start' + `gap'
+				
+				qui replace _dot = `counter' if _grp==`x' & inrange(_id, `start', `end') 
+				
+				local start = `end' + 1
+				local ++counter
+			}
 		}
 	}	
+	
+	
 	
 	
 	cap confirm numeric var _cats
