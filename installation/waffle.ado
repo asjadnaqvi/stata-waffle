@@ -160,7 +160,7 @@ quietly {
 	egen _tag2 = tag(_grp `over')
 	egen _tag3 = group(`over')
 	
-	levelsof _grp, local(lvls)
+	levelsof _grp , local(lvls)
 	levelsof _tag3, local(ovrs)
 	
 	local items = r(r)
@@ -176,20 +176,18 @@ quietly {
 			summ _share if _grp==`x' & _tag3==`y' & _tag2==1, meanonly
 			local share = r(mean)
 			
+			
 			if `r(N)' > 0 {
-			
 				summ _id  if _grp==`x', meanonly
-			
-			
-				local gap = int(`share' * `r(max)')
-				
+
+				local gap = int(`share' * `r(max)')			
 				local end = `start' + `gap'
 				
 				qui replace _dot = `counter' if _grp==`x' & inrange(_id, `start', `end') 
-				
 				local start = `end' + 1
-				local ++counter
+				
 			}
+			local ++counter
 		}
 	}	
 	
