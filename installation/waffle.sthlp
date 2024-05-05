@@ -1,11 +1,11 @@
 {smcl}
-{* 04Apr2024}{...}
+{* 05May2024}{...}
 {hi:help waffle}{...}
-{right:{browse "https://github.com/asjadnaqvi/stata-waffle":waffle v1.1 (GitHub)}}
+{right:{browse "https://github.com/asjadnaqvi/stata-waffle":waffle v1.11 (GitHub)}}
 
 {hline}
 
-{title:waffle}: A Stata package for waffle plots. 
+{title:waffle}: A Stata package for Waffle plots. 
 
 {p 4 4 2}
 The command is based on the {browse "https://medium.com/the-stata-guide/stata-graphs-waffle-charts-32afc7d6f6dd":Waffle plots} guide on Medium.
@@ -31,11 +31,12 @@ a list of variables. Drawing is currently in alphabetical order.{p_end}
 {it:Option 2: Long form}
 {p2coldent : {opt waffle numvar, by(var)}}Use this option if the data is in long form and a single {it:numvar} can be split using the {opt by()} variable.{p_end}
 
-
 {p2coldent : {opt over(var)}}Further splits the waffle into {opt over()} groups where each is assigned a different color.{p_end}
 
-{p2coldent : {opt normvar(var)}}Normalize the heights based on the {opt normvar()} variable. Otherwise the category with the highest value will
-be shown as fully covering all the dots in the waffle. The gaps to the full height as shown as no data (nd) symbols. See options below.{p_end}
+{p2coldent : {opt normvar(var)}}Normalize the heights based on the {opt normvar()} variable. Otherwise the category with the highest value will be shown as fully covering 
+all the dots in the waffle. The gaps to the full height as shown as no data (nd) symbols. See options below. It is highly recommended to calculate the {opt normvar()} 
+beforehand. For wide form the sum of {opt normvar()} values are taken since each row is assumed to be a subset, for long form the mean of {opt normvar()} is taken.
+This option might still evolve to better fit user cases.{p_end}
 
 {p2coldent : {opt percent}}This will normalize each category to 100% split into own {opt over()} categories.{p_end}
 
@@ -99,8 +100,8 @@ See {browse "https://github.com/asjadnaqvi/stata-streamplot":GitHub}.
 
 {title:Package details}
 
-Version      : {bf:waffle} v1.1
-This release : 04 Apr 2024
+Version      : {bf:waffle} v1.11
+This release : 05 May 2024
 First release: 01 Mar 2022
 Repository   : {browse "https://github.com/asjadnaqvi/stata-waffle":GitHub}
 Keywords     : Stata, graph, waffle
@@ -122,4 +123,4 @@ Twitter      : {browse "https://twitter.com/AsjadNaqvi":@AsjadNaqvi}
 
 {psee}
     {helpb arcplot}, {helpb alluvial}, {helpb bimap}, {helpb bumparea}, {helpb bumpline}, {helpb circlebar}, {helpb circlepack}, {helpb clipgeo}, {helpb delaunay}, {helpb joyplot}, 
-	{helpb marimekko}, {helpb sankey}, {helpb schemepack}, {helpb spider}, {helpb streamplot}, {helpb sunburst}, {helpb treecluster}, {helpb treemap}
+	{helpb marimekko}, {helpb sankey}, {helpb schemepack}, {helpb spider}, {helpb streamplot}, {helpb sunburst}, {helpb treecluster}, {helpb treemap}, {helpb waffle}

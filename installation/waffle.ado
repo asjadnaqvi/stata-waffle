@@ -1,15 +1,12 @@
-*! waffle v1.1 (04 Apr 2024)
+*! waffle v1.11 (05 May 2024)
 *! Asjad Naqvi and Jared Colston
 
-*v1.1 (04 Apr 2024): Re-release. Allows wide and long form data.
-*v1.0 (01 Mar 2022): First release by Jared Colston
+*v1.11 (05 May 2024): Bug fixes to how data was collapsed under different conditions. normvar now needs to be already the sum value.
+*v1.1  (04 Apr 2024): Re-release. Allows wide and long form data.
+*v1.0  (01 Mar 2022): First release by Jared Colston
 
 * Code is based on the Waffle guide on Medium: https://medium.com/the-stata-guide/stata-graphs-waffle-charts-32afc7d6f6dd
 
-/*
-TODO: ADD CHECKS
-
-*/
 
 
 capture program drop waffle 
@@ -50,8 +47,8 @@ quietly {
 		local ovswitch  = 1
 	}
 	
+
 	keep `varlist' `normvar' `over' `by'
-	
 
 	local length : word count `varlist'
 	
@@ -78,51 +75,63 @@ quietly {
 	}
 	if `length' == 1 {	
 		
+		if "`by'" == ""	{
+			gen _by = 1 
+			local by _by
+		}		
+		
 		cap ren `by' _cats
 		
 		if "`normvar'"=="" {
 			collapse (sum) `varlist', by(_cats `over')
 		}
 		else {
-			collapse (sum) `varlist' (sum) `normvar', by(_cats `over')
+			collapse (sum) `varlist' (mean) `normvar', by(_cats `over')
 		}
-		
-		
+
 		cap ren `varlist' y_
 	}	
 	
-	
 	sort _cats `over'
 	ren y_ _val
-		
+
+	
 	egen _grp = group(_cats)
 	
 	
 	local max = 0
 	
-	if "`normvar'" == "" {
-		levelsof _grp, local(lvls)
-		
-		foreach x of local lvls {
-			summ _val if _grp==`x', meanonly
-			if r(sum) > `max' local max = r(sum)
+	if `length' > 1 {
+		if "`normvar'" == "" {
+			levelsof _grp, local(lvls)
+			
+			foreach x of local lvls {
+				summ _val if _grp==`x', meanonly
+				if r(sum) > `max' local max = r(sum)
+			}
+		}
+		else {
+			levelsof _grp, local(lvls)
+			
+			foreach x of local lvls {
+				summ `normvar' if _grp==`x', meanonly
+				if r(sum) > `max' local max = r(sum)
+			}
+			
 		}
 	}
-	else {
-		levelsof _grp, local(lvls)
-		
-		foreach x of local lvls {
-			summ `normvar' if _grp==`x', meanonly
-			if r(sum) > `max' local max = r(sum)
-		}
-		
-		*drop `normvar'
+	if `length'==1 {
+		summ `normvar', meanonly
+		local max = r(max)
 	}
+	
 
+	cap drop `normvar'
+	
 	gen double _share = .
 
 	if "`percent'" == "" {
-		replace _share = _val / `max' // if _grp==`x'  & `over'==`y'
+		replace _share = _val / `max' 
 	}
 	else {
 		levelsof _grp, local(lvls)
@@ -134,7 +143,8 @@ quietly {
 		
 	}
 	
-
+	
+	
 	egen _tag = tag(_grp)
 	
 	bysort _cats: egen double _share_tot = sum(_share)
@@ -309,6 +319,7 @@ quietly {
 	if "`nolegend'" != ""  {
 		local legswitch legend(off)
 		local mylegend legend(off)		
+		local myleg2 
 	}	
 	
 	if "`ovswitch'" == "1"  {

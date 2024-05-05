@@ -8,8 +8,8 @@
 
 ---
 
-# waffle v1.1
-(04 Apr 2024)
+# waffle v1.11
+(05 May 2024)
 
 This package provides the ability to draw waffles Stata. It is based on the [Waffle plots](https://medium.com/the-stata-guide/stata-graphs-waffle-plots-613808b51f73) guide on Medium.
 
@@ -25,7 +25,7 @@ The SSC version (**v1.0**):
 ssc install waffle, replace
 ```
 
-Or it can be installed from GitHub (**v1.1**):
+Or it can be installed from GitHub (**v1.11**):
 
 ```
 net install waffle, from("https://raw.githubusercontent.com/asjadnaqvi/stata-waffle/main/installation/") replace
@@ -319,6 +319,10 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-waffle/issues) to rep
 
 
 ## Change log
+
+**v1.11 (05 May 2024)**
+- Several bug fixes in how data was being collapsed in both long and wide form.
+- For long form, the option `normvar()` should now by already calculated. For wide form, each row of `normvar()` is assumed to be different and summed up. These options might still evolve. to better fit use cases.
 
 **v1.1 (04 Apr 2024)**
 - Rerelease with reworked code. This version is still beta.
