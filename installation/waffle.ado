@@ -238,9 +238,7 @@ quietly {
 	}
 	
 
-
-	
-	drop _i _control _temp
+	*drop _i _control _temp
 	
 	if "`msize'"   		== "" 	local msize		0.85	
 	if "`msymbol'" 		== "" 	local msymbol	square	
