@@ -303,12 +303,16 @@ lab de groups 1 "Indian" 2 "Asian" 3 "Blacks" 4 "White" 5 "Island", replace
 lab val groups groups
 
 drop if groups==5
+
+
+bysort byvar: egen normvar = sum(total)
+format normvar %18.0fc
 ```
 
 and run the command with long options:
 
 ```
-waffle y_ , by(groups) over(agecat) normvar(total)  note("") showpct
+waffle y_ , by(groups) over(agecat) normvar(normvar) note("") showpct
 ```
 
 <img src="/figures/waffle15.png" width="100%">
@@ -322,7 +326,7 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-waffle/issues) to rep
 
 **v1.11 (05 May 2024)**
 - Several bug fixes in how data was being collapsed in both long and wide form.
-- For long form, the option `normvar()` should now by already calculated. For wide form, each row of `normvar()` is assumed to be different and summed up. These options might still evolve. to better fit use cases.
+- For long form, the option `normvar()` should now by already calculated. For wide form, each row of `normvar()` is assumed to be different and summed up. These options might still evolve to better fit use cases.
 
 **v1.1 (04 Apr 2024)**
 - Rerelease with reworked code. This version is still beta.
