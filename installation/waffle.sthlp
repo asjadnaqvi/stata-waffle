@@ -1,7 +1,7 @@
 {smcl}
-{* 05May2024}{...}
+{* 26May2024}{...}
 {hi:help waffle}{...}
-{right:{browse "https://github.com/asjadnaqvi/stata-waffle":waffle v1.11 (GitHub)}}
+{right:{browse "https://github.com/asjadnaqvi/stata-waffle":waffle v1.2 (GitHub)}}
 
 {hline}
 
@@ -55,7 +55,7 @@ Changing these will automatically trigger a change in the aspect ratio to ensure
 {p2coldent : {opt msym:bol(list)}}Provide a list of acceptable marker symbols for each {opt over()} category. If the length of symbols is less than the {opt over()} layers,
 then the last specified symbol is used for the remaining layers. Default is {opt msymb(square)}, which is an obvious choice for a waffle plot.{p_end}
 
-{p2coldent : {opt ms:ize(list)}}Provide a list of marker sizes for each {opt over()} category. Default is {opt msize(0.85)}.{p_end}
+{p2coldent : {opt ms:ize(list)}}Provide a list of marker sizes for each {opt over()} category. Default is {opt msize(0.9)}.{p_end}
 
 {p2coldent : {opt mlwid:th(list)}}Provide a list of marker line widths for each {opt over()} category. Useful if hollow symbols are used, which look very
 slim compared to filled symbols. Default is {opt mlwid(0.05)}.{p_end}
@@ -100,8 +100,8 @@ See {browse "https://github.com/asjadnaqvi/stata-streamplot":GitHub}.
 
 {title:Package details}
 
-Version      : {bf:waffle} v1.11
-This release : 05 May 2024
+Version      : {bf:waffle} v1.2
+This release : 26 May 2024
 First release: 01 Mar 2022
 Repository   : {browse "https://github.com/asjadnaqvi/stata-waffle":GitHub}
 Keywords     : Stata, graph, waffle
@@ -123,4 +123,4 @@ Twitter      : {browse "https://twitter.com/AsjadNaqvi":@AsjadNaqvi}
 
 {psee}
     {helpb arcplot}, {helpb alluvial}, {helpb bimap}, {helpb bumparea}, {helpb bumpline}, {helpb circlebar}, {helpb circlepack}, {helpb clipgeo}, {helpb delaunay}, {helpb joyplot}, 
-	{helpb marimekko}, {helpb sankey}, {helpb schemepack}, {helpb spider}, {helpb streamplot}, {helpb sunburst}, {helpb treecluster}, {helpb treemap}, {helpb waffle}
+	{helpb marimekko}, {helpb polarspike}, {helpb sankey}, {helpb schemepack}, {helpb spider}, {helpb splineplot}, {helpb streamplot}, {helpb sunburst}, {helpb treecluster}, {helpb treemap}, {helpb waffle}

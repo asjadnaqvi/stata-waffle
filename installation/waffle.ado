@@ -1,6 +1,7 @@
-*! waffle v1.11 (05 May 2024)
+*! waffle v1.2 (26 May 2024)
 *! Asjad Naqvi and Jared Colston
 
+*v1.2  (26 May 2024): Fix long graph normalization bug. better treatment of null shares. r(dot) added.
 *v1.11 (05 May 2024): Bug fixes to how data was collapsed under different conditions. normvar now needs to be already the sum value.
 *v1.1  (04 Apr 2024): Re-release. Allows wide and long form data.
 *v1.0  (01 Mar 2022): First release by Jared Colston
@@ -11,7 +12,7 @@
 
 capture program drop waffle 
 
-program waffle, sortpreserve
+program waffle, sortpreserve rclass
 version 15
 
 syntax varlist(numeric min=1) [if] [in], ///
@@ -40,7 +41,6 @@ quietly {
 	
 	
 	// preamble
-	
 	if "`over'" == ""	{
 		gen _over = 1 
 		local over _over
@@ -82,6 +82,10 @@ quietly {
 		
 		cap ren `by' _cats
 		
+		fillin _cats `over'
+		recode `varlist' (.=0)
+		drop _fillin
+		
 		if "`normvar'"=="" {
 			collapse (sum) `varlist', by(_cats `over')
 		}
@@ -99,33 +103,30 @@ quietly {
 	egen _grp = group(_cats)
 	
 	
+	
 	local max = 0
 	
-	if `length' > 1 {
-		if "`normvar'" == "" {
-			levelsof _grp, local(lvls)
-			
-			foreach x of local lvls {
-				summ _val if _grp==`x', meanonly
-				if r(sum) > `max' local max = r(sum)
-			}
-		}
-		else {
-			levelsof _grp, local(lvls)
-			
-			foreach x of local lvls {
-				summ `normvar' if _grp==`x', meanonly
-				if r(sum) > `max' local max = r(sum)
-			}
-			
-		}
-	}
-	if `length'==1 {
-		summ `normvar', meanonly
-		local max = r(max)
-	}
-	
 
+	if "`normvar'" == "" {
+		levelsof _grp, local(lvls)
+			
+		foreach x of local lvls {
+			summ _val if _grp==`x', meanonly
+			if r(sum) > `max' local max = r(sum)
+		}
+	}
+	else {
+		levelsof _grp, local(lvls)
+		
+		foreach x of local lvls {
+			summ `normvar' if _grp==`x', meanonly
+			if r(sum) > `max' local max = r(max)
+		}
+		
+	}
+
+	
+	
 	cap drop `normvar'
 	
 	gen double _share = .
@@ -140,17 +141,28 @@ quietly {
 						
 			replace _share = _val / r(sum) if _grp==`x' 
 		}
-		
 	}
 	
 	
-	
+
 	egen _tag = tag(_grp)
 	
 	bysort _cats: egen double _share_tot = sum(_share)
 	
 	
 	local obsv = `rowdots' * `coldots'  // calculate the total number of rows per group
+	
+	
+	
+	if "percent" != "" {
+		local dotval = 100 / `obsv'
+		return local dot `dotval'
+	}
+	else {
+		local dotval = `max' / `obsv'
+		return local dot `dotval'
+	}
+	
 	
 	expand `obsv' if _tag==1, gen(_control)	
 		
@@ -186,8 +198,7 @@ quietly {
 			summ _share if _grp==`x' & _tag3==`y' & _tag2==1, meanonly
 			local share = r(mean)
 			
-			
-			if `r(N)' > 0 {
+			if `r(N)' > 0 & `share' > 0 {
 				summ _id  if _grp==`x', meanonly
 
 				local gap = int(`share' * `r(max)')			
@@ -201,9 +212,7 @@ quietly {
 		}
 	}	
 	
-	
-	
-	
+
 	cap confirm numeric var _cats
 	if !_rc {
 		decode _cats, gen(_temp)
@@ -238,9 +247,11 @@ quietly {
 	}
 	
 
-	*drop _i _control _temp
+	capture drop _i 
+	capture drop _control 
+	capture drop _temp
 	
-	if "`msize'"   		== "" 	local msize		0.85	
+	if "`msize'"   		== "" 	local msize		0.90	
 	if "`msymbol'" 		== "" 	local msymbol	square	
 	if "`mlwidth'" 		== "" 	local mlwidth	0.05	
 	if "`ndsymbol'"		== "" 	local ndsymbol	square		

@@ -8,8 +8,8 @@
 
 
 
-# waffle v1.2
-(26 May 2024)
+# waffle v1.11
+(05 May 2024)
 
 This package provides the ability to draw waffles Stata. It is based on the [Waffle plots](https://medium.com/the-stata-guide/stata-graphs-waffle-plots-613808b51f73) guide on Medium.
 
@@ -25,7 +25,7 @@ The SSC version (**v1.11**):
 ssc install waffle, replace
 ```
 
-Or it can be installed from GitHub (**v1.2**):
+Or it can be installed from GitHub (**v1.11**):
 
 ```
 net install waffle, from("https://raw.githubusercontent.com/asjadnaqvi/stata-waffle/main/installation/") replace
@@ -323,12 +323,6 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-waffle/issues) to rep
 
 
 ## Change log
-
-**v1.2 (26 May 2024)**
-- Program has been converted into r-class where `r(dot)` returns the value of each box. See `return list` after running the command.
-- Fixed a major bug with long data format that was not displaying the totals correctly.
-- Better treatment of null values. Previous version was still drawing zero categories.
-
 
 **v1.11 (05 May 2024)**
 - Several bug fixes in how data was being collapsed in both long and wide form.
