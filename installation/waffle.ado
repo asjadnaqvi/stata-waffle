@@ -1,6 +1,7 @@
-*! waffle v1.2 (26 May 2024)
+*! waffle v1.21 (27 Jun 2024)
 *! Asjad Naqvi and Jared Colston
 
+*v1.21 (27 Jun 2024): by _cats bug. Post graph now shows dotval as an output. return locals fixed.
 *v1.2  (26 May 2024): Fix long graph normalization bug. better treatment of null shares. r(dot) added.
 *v1.11 (05 May 2024): Bug fixes to how data was collapsed under different conditions. normvar now needs to be already the sum value.
 *v1.1  (04 Apr 2024): Re-release. Allows wide and long form data.
@@ -12,7 +13,7 @@
 
 capture program drop waffle 
 
-program waffle, sortpreserve rclass
+program waffle, rclass sortpreserve 
 version 15
 
 syntax varlist(numeric min=1) [if] [in], ///
@@ -75,9 +76,12 @@ quietly {
 	}
 	if `length' == 1 {	
 		
+		local byoff = 0
+		
 		if "`by'" == ""	{
 			gen _by = 1 
 			local by _by
+			local byoff = 1
 		}		
 		
 		cap ren `by' _cats
@@ -154,7 +158,9 @@ quietly {
 	
 	
 	
-	if "percent" != "" {
+	return local maxdots `obsv'
+	
+	if "`percent'" != "" {
 		local dotval = 100 / `obsv'
 		return local dot `dotval'
 	}
@@ -162,6 +168,7 @@ quietly {
 		local dotval = `max' / `obsv'
 		return local dot `dotval'
 	}
+	
 	
 	
 	expand `obsv' if _tag==1, gen(_control)	
@@ -181,6 +188,9 @@ quietly {
 	
 	egen _tag2 = tag(_grp `over')
 	egen _tag3 = group(`over')
+	
+
+
 	
 	levelsof _grp , local(lvls)
 	levelsof _tag3, local(ovrs)
@@ -213,13 +223,21 @@ quietly {
 	}	
 	
 
-	cap confirm numeric var _cats
-	if !_rc {
-		decode _cats, gen(_temp)
+	if "`byoff'" != "1" {
+		
+		cap confirm numeric var _cats
+		if !_rc {
+			decode _cats, gen(_temp)
+		}
+		else {
+			gen _temp = _cats
+		}
 	}
 	else {
-		gen _temp = _cats
+		gen _temp = string(_cats)
 	}
+	
+	
 	
 	
 	if "`format'"  == "" {
@@ -356,6 +374,7 @@ quietly {
 				aspect(`aspect') `options'	
 						
 	
+	noi display in yellow "Each dot has a value of `dotval'. See {stata return list} for stored values."
 	
 	*/
 	}

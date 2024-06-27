@@ -1,7 +1,7 @@
 {smcl}
-{* 26May2024}{...}
+{* 27Jun2024}{...}
 {hi:help waffle}{...}
-{right:{browse "https://github.com/asjadnaqvi/stata-waffle":waffle v1.2 (GitHub)}}
+{right:{browse "https://github.com/asjadnaqvi/stata-waffle":waffle v1.21 (GitHub)}}
 
 {hline}
 
@@ -93,15 +93,15 @@ Even if you have these installed, it is highly recommended to check for updates:
 
 {title:Examples}
 
-See {browse "https://github.com/asjadnaqvi/stata-streamplot":GitHub}.
+See {browse "https://github.com/asjadnaqvi/stata-waffle":GitHub}.
 
 {hline}
 
 
 {title:Package details}
 
-Version      : {bf:waffle} v1.2
-This release : 26 May 2024
+Version      : {bf:waffle} v1.21
+This release : 27 Jun 2024
 First release: 01 Mar 2022
 Repository   : {browse "https://github.com/asjadnaqvi/stata-waffle":GitHub}
 Keywords     : Stata, graph, waffle
@@ -110,6 +110,26 @@ License      : {browse "https://opensource.org/licenses/MIT":MIT}
 Authors      : {browse "https://github.com/asjadnaqvi":Asjad Naqvi} & {browse "jaredcolston.com":Jared Colston}
 E-mail       : asjadnaqvi@gmail.com, colston@wisc.edu
 Twitter      : {browse "https://twitter.com/AsjadNaqvi":@AsjadNaqvi}
+
+
+{title:Feedback}
+
+Please submit bugs, errors, feature requests on {browse "https://github.com/asjadnaqvi/stata-waffle/issues":GitHub} by opening a new issue.
+
+
+{title:Citation guidelines}
+
+Suggested citation guidlines for this package:
+
+Naqvi, A. and Colston, J. (2024). Stata package "waffle" version 1.21. Release date 27 June 2024. https://github.com/asjadnaqvi/stata-waffle.
+
+@software{waffle,
+   author = {Naqvi, Asjad AND Colston, Jared},
+   title = {Stata package ``waffle''},
+   url = {https://github.com/asjadnaqvi/stata-waffle},
+   version = {1.21},
+   date = {2024-06-27}
+}
 
 
 {title:References}

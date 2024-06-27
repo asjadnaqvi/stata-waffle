@@ -1,6 +1,6 @@
 ![StataMin](https://img.shields.io/badge/stata-2015-blue) ![issues](https://img.shields.io/github/issues/asjadnaqvi/stata-waffle) ![license](https://img.shields.io/github/license/asjadnaqvi/stata-waffle) ![Stars](https://img.shields.io/github/stars/asjadnaqvi/stata-waffle) ![version](https://img.shields.io/github/v/release/asjadnaqvi/stata-waffle) ![release](https://img.shields.io/github/release-date/asjadnaqvi/stata-waffle)
 
-[Installation](#Installation) | [Syntax](#Syntax) | [Examples](#Examples) | [Feedback](#Feedback) | [Change log](#Change-log)
+[Installation](#Installation) | [Syntax](#Syntax) | [Citation guidelines](#Citation-guidelines) | [Examples](#Examples) | [Feedback](#Feedback) | [Change log](#Change-log)
 
 ---
 
@@ -8,8 +8,8 @@
 
 
 
-# waffle v1.2
-(26 May 2024)
+# waffle v1.21
+(27 June 2024)
 
 This package provides the ability to draw waffles Stata. It is based on the [Waffle plots](https://medium.com/the-stata-guide/stata-graphs-waffle-plots-613808b51f73) guide on Medium.
 
@@ -20,12 +20,12 @@ The package is still beta and is being constantly improved. It might still be mi
 
 The package can be installed via SSC or GitHub. The GitHub version, *might* be more recent due to bug fixes, feature updates etc, and *may* contain syntax improvements and changes in *default* values. See version numbers below. Eventually the GitHub version is published on SSC.
 
-The SSC version (**v1.11**):
+The SSC version (**v1.2**):
 ```
 ssc install waffle, replace
 ```
 
-Or it can be installed from GitHub (**v1.2**):
+Or it can be installed from GitHub (**v1.21**):
 
 ```
 net install waffle, from("https://raw.githubusercontent.com/asjadnaqvi/stata-waffle/main/installation/") replace
@@ -85,6 +85,35 @@ waffle variable, by()
 ```
 
 where `variable(s)` are a set of numeric variables.
+
+
+
+## Citation guidelines
+Software packages take countless hours of programming, testing, and bug fixing. If you use this package, then a citation would be highly appreciated. Suggested citations:
+
+
+*in BibTeX*
+
+```
+@software{waffle,
+   author = {Naqvi, Asjad AND Colston, Jared},
+   title = {Stata package ``waffle''},
+   url = {https://github.com/asjadnaqvi/stata-waffle},
+   version = {1.21},
+   date = {2024-07-21}
+}
+```
+
+*or simple text*
+
+```
+Naqvi, A. & Colston, J. (2024). Stata package "waffle" version 1.21. Release date 21 June 2024. https://github.com/asjadnaqvi/stata-waffle.
+```
+
+
+*or see [SSC citation](https://ideas.repec.org/c/boc/bocode/s459059.html) (updated once a new version is submitted)*
+
+
 
 ## Examples
 
@@ -323,6 +352,11 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-waffle/issues) to rep
 
 
 ## Change log
+
+**v1.21 (27 May 2024)**
+- Fixed a bug where the program was running into an error if `by()` was not specified.
+- Fixed and improved returned locals. See `return list` after running the command.
+- The program now displays the value of each dot after the graph is drawn.
 
 **v1.2 (26 May 2024)**
 - Program has been converted into r-class where `r(dot)` returns the value of each box. See `return list` after running the command.

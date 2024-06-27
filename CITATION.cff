@@ -5,6 +5,6 @@ authors:
 - family-names: "Colston"
   given-names: "Jared"
 title: "Stata package ``waffle''"
-version: 1.2
-date-released: 2024-05-26
+version: 1.21
+date-released: 2024-06-27
 url: "https://github.com/asjadnaqvi/stata-waffle"

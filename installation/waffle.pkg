@@ -1,4 +1,4 @@
-v 1.2
+v 1.21
 d {bf:WAFFLE}: A Stata package for Waffle plots.
 d See {helpb waffle} after installation.
 d
@@ -8,9 +8,9 @@ d KW: Stata
 d KW: graphs
 d KW: waffle
 d
-d Distribution-Date: 20240526
+d Distribution-Date: 20240627
 d
-d This  version: 26 May 2024
+d This  version: 27 Jun 2024
 d First version: 01 Mar 2022
 d License: MIT
 d

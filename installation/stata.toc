@@ -1,7 +1,7 @@
-v 1.2
+v 1.21
 d 'WAFFLE': A Stata package for waffle plots
 d
-d Distribution-Date: 20240526
+d Distribution-Date: 20240627
 d
 
 
