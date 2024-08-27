@@ -1,6 +1,7 @@
-*! waffle v1.21 (27 Jun 2024)
+*! waffle v1.22 (27 Aug 2024)
 *! Asjad Naqvi and Jared Colston
 
+*v1.22 (27 Aug 2024): fixed label issues for graphs with just one item. Fixed a bug where wrong totals were calculated under certain conditions.
 *v1.21 (27 Jun 2024): by _cats bug. Post graph now shows dotval as an output. return locals fixed.
 *v1.2  (26 May 2024): Fix long graph normalization bug. better treatment of null shares. r(dot) added.
 *v1.11 (05 May 2024): Bug fixes to how data was collapsed under different conditions. normvar now needs to be already the sum value.
@@ -86,6 +87,7 @@ quietly {
 		
 		cap ren `by' _cats
 		
+		
 		fillin _cats `over'
 		recode `varlist' (.=0)
 		drop _fillin
@@ -103,6 +105,8 @@ quietly {
 	sort _cats `over'
 	ren y_ _val
 
+	
+	
 	
 	egen _grp = group(_cats)
 	
@@ -129,6 +133,7 @@ quietly {
 		
 	}
 
+	
 	
 	
 	cap drop `normvar'
@@ -189,6 +194,7 @@ quietly {
 	egen _tag2 = tag(_grp `over')
 	egen _tag3 = group(`over')
 	
+
 
 
 	
@@ -256,15 +262,16 @@ quietly {
 		levelsof _grp, local(lvls)
 	
 		foreach x of local lvls {
-			summ _val if _grp==`x' & _tag2==1, meanonly
-			replace _label = _temp + " (" + string(r(sum), "`format'") + ")"	if _grp==`x'
+			summ _val if _grp==`x' & _control==0, meanonly
+			replace _label = _temp + " (" + string(r(sum), "`format'") + ")"	if _grp==`x' 
 		}
 	}
 	else {
-		replace _label = _temp + " (" + string(_share_tot * 100, "`format'") + "%)"	
+		replace _label = _temp + " (" + string(_share_tot * 100, "`format'") + "%)"	 
 	}
 	
-
+		
+	
 	capture drop _i 
 	capture drop _control 
 	capture drop _temp
@@ -274,16 +281,9 @@ quietly {
 	if "`mlwidth'" 		== "" 	local mlwidth	0.05	
 	if "`ndsymbol'"		== "" 	local ndsymbol	square		
 	if "`ndsize'"   	== "" 	local ndsize	0.5
-	if "`legposition'"  == "" 	local legposition	6
-	
-	if "`ndcolor'" 	== "" 	{
-		if "`normvar'" == "" {
-			local ndcolor none
-		}
-		else {
-			local ndcolor gs14
-		}
-	}
+	if "`legposition'"  == "" 	local legposition	6	
+	if "`ndcolor'" 		== "" 	local ndcolor gs12
+
 	
 	if "`palette'" == "" {
 		local palette tableau
@@ -365,8 +365,8 @@ quietly {
 		`dots' ///
 		(scatter _y _x if _dot==0, msize(`ndsize') msymbol(`ndsymbol') mcolor(`ndcolor')) ///
 			, ///
-			ytitle("") yscale(noline) ylabel(, nogrid) ///
-			xtitle("") xscale(noline) xlabel(, nogrid) ///
+			ytitle("") yscale(off noline range(1 `coldots')) ylabel(, nogrid) ///
+			xtitle("") xscale(off noline range(1 `rowdots')) xlabel(, nogrid) ///
 			by(, noiyaxes noixaxes noiytick noixtick noiylabel noixlabel `myleg2'	 ) ///
 			by(_label, `title' `note' rows(`rows') cols(`cols') imargin(`margin') `legswitch' ) ///
 			`subtitle' ///
@@ -375,6 +375,10 @@ quietly {
 						
 	
 	noi display in yellow "Each dot has a value of `dotval'. See {stata return list} for stored values."
+	
+	
+
+	
 	
 	*/
 	}

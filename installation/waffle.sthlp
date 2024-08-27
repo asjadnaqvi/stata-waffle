@@ -1,7 +1,7 @@
 {smcl}
-{* 27Jun2024}{...}
+{* 27Aug2024}{...}
 {hi:help waffle}{...}
-{right:{browse "https://github.com/asjadnaqvi/stata-waffle":waffle v1.21 (GitHub)}}
+{right:{browse "https://github.com/asjadnaqvi/stata-waffle":waffle v1.22 (GitHub)}}
 
 {hline}
 
@@ -100,8 +100,8 @@ See {browse "https://github.com/asjadnaqvi/stata-waffle":GitHub}.
 
 {title:Package details}
 
-Version      : {bf:waffle} v1.21
-This release : 27 Jun 2024
+Version      : {bf:waffle} v1.22
+This release : 27 Aug 2024
 First release: 01 Mar 2022
 Repository   : {browse "https://github.com/asjadnaqvi/stata-waffle":GitHub}
 Keywords     : Stata, graph, waffle
@@ -121,14 +121,14 @@ Please submit bugs, errors, feature requests on {browse "https://github.com/asja
 
 Suggested citation guidlines for this package:
 
-Naqvi, A. and Colston, J. (2024). Stata package "waffle" version 1.21. Release date 27 June 2024. https://github.com/asjadnaqvi/stata-waffle.
+Naqvi, A. and Colston, J. (2024). Stata package "waffle" version 1.22. Release date 27 August 2024. https://github.com/asjadnaqvi/stata-waffle.
 
 @software{waffle,
    author = {Naqvi, Asjad AND Colston, Jared},
    title = {Stata package ``waffle''},
    url = {https://github.com/asjadnaqvi/stata-waffle},
-   version = {1.21},
-   date = {2024-06-27}
+   version = {1.22},
+   date = {2024-08-27}
 }
 
 

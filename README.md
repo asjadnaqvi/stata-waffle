@@ -8,8 +8,8 @@
 
 
 
-# waffle v1.21
-(27 June 2024)
+# waffle v1.22
+(27 Aug 2024)
 
 This package provides the ability to draw waffles Stata. It is based on the [Waffle plots](https://medium.com/the-stata-guide/stata-graphs-waffle-plots-613808b51f73) guide on Medium.
 
@@ -20,12 +20,12 @@ The package is still beta and is being constantly improved. It might still be mi
 
 The package can be installed via SSC or GitHub. The GitHub version, *might* be more recent due to bug fixes, feature updates etc, and *may* contain syntax improvements and changes in *default* values. See version numbers below. Eventually the GitHub version is published on SSC.
 
-The SSC version (**v1.2**):
+The SSC version (**v1.21**):
 ```
 ssc install waffle, replace
 ```
 
-Or it can be installed from GitHub (**v1.21**):
+Or it can be installed from GitHub (**v1.22**):
 
 ```
 net install waffle, from("https://raw.githubusercontent.com/asjadnaqvi/stata-waffle/main/installation/") replace
@@ -352,6 +352,11 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-waffle/issues) to rep
 
 
 ## Change log
+
+
+**v1.22 (27 Aug 2024)**
+- Fixed a bug where labels were not passing correctly under certain conditions.
+- Fixed a bug where totals were not showing correctly under certain conditions.
 
 **v1.21 (27 May 2024)**
 - Fixed a bug where the program was running into an error if `by()` was not specified.
