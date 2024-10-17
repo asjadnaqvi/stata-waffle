@@ -1,12 +1,13 @@
-*! waffle v1.22 (27 Aug 2024)
+*! waffle v1.22 (18 Oct 2024)
 *! Asjad Naqvi and Jared Colston
 
-*v1.22 (27 Aug 2024): fixed label issues for graphs with just one item. Fixed a bug where wrong totals were calculated under certain conditions.
-*v1.21 (27 Jun 2024): by _cats bug. Post graph now shows dotval as an output. return locals fixed.
-*v1.2  (26 May 2024): Fix long graph normalization bug. better treatment of null shares. r(dot) added.
-*v1.11 (05 May 2024): Bug fixes to how data was collapsed under different conditions. normvar now needs to be already the sum value.
-*v1.1  (04 Apr 2024): Re-release. Allows wide and long form data.
-*v1.0  (01 Mar 2022): First release by Jared Colston
+* v1.23 (18 Oct 2024): Added `noval' to remove the totals. Added `wrap()` for label wrapping.
+* v1.22 (27 Aug 2024): fixed label issues for graphs with just one item. Fixed a bug where wrong totals were calculated under certain conditions.
+* v1.21 (27 Jun 2024): by _cats bug. Post graph now shows dotval as an output. return locals fixed.
+* v1.2  (26 May 2024): Fix long graph normalization bug. better treatment of null shares. r(dot) added.
+* v1.11 (05 May 2024): Bug fixes to how data was collapsed under different conditions. normvar now needs to be already the sum value.
+* v1.1  (04 Apr 2024): Re-release. Allows wide and long form data.
+* v1.0  (01 Mar 2022): First release by Jared Colston
 
 * Code is based on the Waffle guide on Medium: https://medium.com/the-stata-guide/stata-graphs-waffle-charts-32afc7d6f6dd
 
@@ -23,7 +24,8 @@ syntax varlist(numeric min=1) [if] [in], ///
 		ROWDots(real 20) COLDots(real 20) MSYMbol(string) MLWIDth(string) MSize(string)	 ///
 		NDSYMbol(string)  NDSize(string) NDColor(string)	///   // No Data = ND
 		COLs(real 4) LEGPOSition(string) LEGCOLumns(real 4) LEGSize(string) NOLEGend margin(string) ///
-		aspect(numlist max=1 >0) note(passthru) title(passthru) subtitle(passthru) * 	]
+		aspect(numlist max=1 >0) note(passthru) title(passthru) subtitle(passthru)   * 	  ///
+		NOVALues wrap(numlist >=0 max=1)  ]   // v1.23 options
 
 	
 	// check dependencies
@@ -32,6 +34,15 @@ syntax varlist(numeric min=1) [if] [in], ///
 		display as error "The palettes package is missing. Install the {stata ssc install palettes, replace:palettes} and {stata ssc install colrspace, replace:colrspace} packages."
 		exit
 	}	
+	
+	
+	if "`wrap'" != "" {
+		cap findfile labsplit.ado
+		if _rc != 0 {
+			display as error "The {bf:graphfunctions} package is missing. Install the {stata ssc install graphfunctions, replace:graphfunctions}."
+			exit
+		}			
+	}
 	
 	marksample touse, strok
 	
@@ -105,13 +116,10 @@ quietly {
 	sort _cats `over'
 	ren y_ _val
 
-	
-	
-	
+
 	egen _grp = group(_cats)
 	
-	
-	
+
 	local max = 0
 	
 
@@ -133,9 +141,7 @@ quietly {
 		
 	}
 
-	
-	
-	
+
 	cap drop `normvar'
 	
 	gen double _share = .
@@ -173,7 +179,6 @@ quietly {
 		local dotval = `max' / `obsv'
 		return local dot `dotval'
 	}
-	
 	
 	
 	expand `obsv' if _tag==1, gen(_control)	
@@ -258,18 +263,29 @@ quietly {
 	
 	gen _label = ""
 
-	if "`showpct'" == "" {
-		levelsof _grp, local(lvls)
 	
-		foreach x of local lvls {
-			summ _val if _grp==`x' & _control==0, meanonly
-			replace _label = _temp + " (" + string(r(sum), "`format'") + ")"	if _grp==`x' 
+	if "`novalues'" == "" {
+		if "`showpct'" == "" {
+			levelsof _grp, local(lvls)
+		
+			foreach x of local lvls {
+				summ _val if _grp==`x' & _control==0, meanonly
+				replace _label = _temp + " (" + string(r(sum), "`format'") + ")"	if _grp==`x' 
+			}
+		}
+		else {
+			replace _label = _temp + " (" + string(_share_tot * 100, "`format'") + "%)"	 
 		}
 	}
 	else {
-		replace _label = _temp + " (" + string(_share_tot * 100, "`format'") + "%)"	 
+		replace _label = _temp
 	}
 	
+	if "`wrap'" != "" {
+		ren _label _label_temp
+		labsplit _label_temp, wrap(`wrap') gen(_label)
+		drop _label_temp
+	}		
 		
 	
 	capture drop _i 

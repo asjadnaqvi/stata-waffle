@@ -1,7 +1,18 @@
-v 1.22
+v 1.23
 d 'WAFFLE': A Stata package for waffle plots
 d
-d Distribution-Date: 20240827
+d Distribution-Date: 20241018
 d
 
 
+v 1.23
+d 'WAFFLE': A Stata package for waffle plots
+d
+d Distribution-Date: 20241018
+d
+d Jared Colston
+d
+d Asjad Naqvi
+d
+d https://medium.com/the-stata-guide
+p waffle

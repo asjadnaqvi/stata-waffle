@@ -1,7 +1,7 @@
 {smcl}
-{* 27Aug2024}{...}
+{* 18Oct2024}{...}
 {hi:help waffle}{...}
-{right:{browse "https://github.com/asjadnaqvi/stata-waffle":waffle v1.22 (GitHub)}}
+{right:{browse "https://github.com/asjadnaqvi/stata-waffle":waffle v1.23 (GitHub)}}
 
 {hline}
 
@@ -17,19 +17,24 @@ The command is based on the {browse "https://medium.com/the-stata-guide/stata-gr
 {cmd:waffle} {it:numvar(s)} {ifin}, 
                 {cmd:[} {cmd:by}({it:variable}) {cmd:over}({it:variable}) {cmd:normvar}({it:variable}) {cmd:percent} {cmd:showpct} {cmd:format}({it:fmt}) {cmd:palette}({it:name})
                   {cmdab:rowd:ots}({it:num}) {cmdab:cold:ots}({it:num}) {cmd:aspect}({it:num}) {cmdab:msym:bol}({it:list}) {cmdab:ms:ize}({it:list}) {cmdab:mlwid:th}({it:list})
-                  {cmdab:ndsym:bol}({it:str}) {cmdab:nds:ize}({it:str}) {cmdab:ndc:olor}({it:str}) {cmd:cols}({it:num}) {cmd:margin}({it:str}) {cmdab:legcol:umns}({it:num}) {cmdab:legpos:ition}({it:pos}) {cmdab:legs:ize}({it:str})
-                  {cmd:note}({it:str}) {cmd:subtitle}({it:str}) *                                  
-                {cmd:]}
+                  {cmdab:ndsym:bol}({it:str}) {cmdab:nds:ize}({it:str}) {cmdab:ndc:olor}({it:str}) {cmd:cols}({it:num}) {cmd:margin}({it:str}) {cmdab:noval:ues} {cmd:wrap}({it:num})
+                  {cmdab:legcol:umns}({it:num}) {cmdab:legpos:ition}({it:pos}) {cmdab:legs:ize}({it:str}) {cmd:note}({it:str}) {cmd:subtitle}({it:str}) *  {cmd:]}
 
-{p 4 4 2}
-The options are described as follows:
 
-{it:Option 1: Wide form}
+{synoptset 36 tabbed}{...}
+{synopthdr}
+{synoptline}
+
+{p2coldent : {it:Wide form:}}
+
 {p2coldent : {opt waffle numvars}}Use this option if the data is in wide form and each category is stored in a separate variable. Here one can specify
 a list of variables. Drawing is currently in alphabetical order.{p_end}
 
-{it:Option 2: Long form}
+{p2coldent : {it:Long form:}}
+
 {p2coldent : {opt waffle numvar, by(var)}}Use this option if the data is in long form and a single {it:numvar} can be split using the {opt by()} variable.{p_end}
+
+
 
 {p2coldent : {opt over(var)}}Further splits the waffle into {opt over()} groups where each is assigned a different color.{p_end}
 
@@ -41,6 +46,8 @@ This option might still evolve to better fit user cases.{p_end}
 {p2coldent : {opt percent}}This will normalize each category to 100% split into own {opt over()} categories.{p_end}
 
 {p2coldent : {opt showpct}}Show percentage share instead of actual totals in the waffle plot.{p_end}
+
+{p2coldent : {opt noval:ues}}Hide the total or percentage values in front of labels.{p_end}
 
 {p2coldent : {opt format(fmt)}}Format the values displayed. Defaults are {opt format(%15.0fc)} and {opt format(%6.2f)} if the {opt showpct} option is specified.{p_end}
 
@@ -100,8 +107,8 @@ See {browse "https://github.com/asjadnaqvi/stata-waffle":GitHub}.
 
 {title:Package details}
 
-Version      : {bf:waffle} v1.22
-This release : 27 Aug 2024
+Version      : {bf:waffle} v1.23
+This release : 18 Oct 2024
 First release: 01 Mar 2022
 Repository   : {browse "https://github.com/asjadnaqvi/stata-waffle":GitHub}
 Keywords     : Stata, graph, waffle
@@ -121,14 +128,14 @@ Please submit bugs, errors, feature requests on {browse "https://github.com/asja
 
 Suggested citation guidlines for this package:
 
-Naqvi, A. and Colston, J. (2024). Stata package "waffle" version 1.22. Release date 27 August 2024. https://github.com/asjadnaqvi/stata-waffle.
+Naqvi, A. and Colston, J. (2024). Stata package "waffle" version 1.23. Release date 18 October 2024. https://github.com/asjadnaqvi/stata-waffle.
 
 @software{waffle,
    author = {Naqvi, Asjad AND Colston, Jared},
    title = {Stata package ``waffle''},
    url = {https://github.com/asjadnaqvi/stata-waffle},
-   version = {1.22},
-   date = {2024-08-27}
+   version = {1.23},
+   date = {2024-10-18}
 }
 
 
@@ -142,5 +149,7 @@ Naqvi, A. and Colston, J. (2024). Stata package "waffle" version 1.22. Release d
 {title:Other visualization packages}
 
 {psee}
-    {helpb arcplot}, {helpb alluvial}, {helpb bimap}, {helpb bumparea}, {helpb bumpline}, {helpb circlebar}, {helpb circlepack}, {helpb clipgeo}, {helpb delaunay}, {helpb joyplot}, 
-	{helpb marimekko}, {helpb polarspike}, {helpb sankey}, {helpb schemepack}, {helpb spider}, {helpb splineplot}, {helpb streamplot}, {helpb sunburst}, {helpb treecluster}, {helpb treemap}, {helpb waffle}
+    {helpb arcplot}, {helpb alluvial}, {helpb bimap}, {helpb bumparea}, {helpb bumpline}, {helpb circlebar}, {helpb circlepack}, {helpb clipgeo}, {helpb delaunay}, {helpb graphfunctions}, {helpb joyplot}, 
+	{helpb marimekko}, {helpb polarspike}, {helpb sankey}, {helpb schemepack}, {helpb spider}, {helpb splinefit}, {helpb streamplot}, {helpb sunburst}, {helpb ternary}, {helpb treecluster}, {helpb treemap}, {helpb trimap}, {helpb waffle}
+
+or visit {browse "https://github.com/asjadnaqvi":GitHub}.

@@ -8,8 +8,8 @@
 
 
 
-# waffle v1.22
-(27 Aug 2024)
+# waffle v1.23
+(18 Oct 2024)
 
 This package provides the ability to draw waffles Stata. It is based on the [Waffle plots](https://medium.com/the-stata-guide/stata-graphs-waffle-plots-613808b51f73) guide on Medium.
 
@@ -25,7 +25,7 @@ The SSC version (**v1.21**):
 ssc install waffle, replace
 ```
 
-Or it can be installed from GitHub (**v1.22**):
+Or it can be installed from GitHub (**v1.23**):
 
 ```
 net install waffle, from("https://raw.githubusercontent.com/asjadnaqvi/stata-waffle/main/installation/") replace
@@ -37,6 +37,7 @@ The `palettes` package is required to run this command:
 ```
 ssc install palettes, replace
 ssc install colrspace, replace
+ssc install graphfunctions, replace
 ```
 
 Even if you have the package installed, make sure that it is updated `ado update, update`.
@@ -65,9 +66,8 @@ The syntax for the latest version is as follows:
 waffle numvar(s) [if] [in], 
                 [ by(variable) over(variable) normvar(variable) percent showpct format(fmt) palette(name)
                   rowdots(num) coldots(num) aspect(num) msymbol(list) msize(list) mlwidth(list)
-                  ndsymbol(str) ndsize(str) ndcolor(str) cols(num) margin(str) legcolumns(num) legposition(pos) legsize(str)
-                  note(str) subtitle(str) *                                  
-                ]
+                  ndsymbol(str) ndsize(str) ndcolor(str) cols(num) margin(str) novalues wrap(num)
+                  legcolumns(num) legposition(pos) legsize(str) note(str) subtitle(str) *  ]
 ```
 
 See the help file `help waffle` for details.
@@ -99,15 +99,15 @@ Software packages take countless hours of programming, testing, and bug fixing. 
    author = {Naqvi, Asjad AND Colston, Jared},
    title = {Stata package ``waffle''},
    url = {https://github.com/asjadnaqvi/stata-waffle},
-   version = {1.21},
-   date = {2024-07-21}
+   version = {1.23},
+   date = {2024-10-18}
 }
 ```
 
 *or simple text*
 
 ```
-Naqvi, A. & Colston, J. (2024). Stata package "waffle" version 1.21. Release date 21 June 2024. https://github.com/asjadnaqvi/stata-waffle.
+Naqvi, A. & Colston, J. (2024). Stata package "waffle" version 1.23. Release date 18 October 2024. https://github.com/asjadnaqvi/stata-waffle.
 ```
 
 
@@ -167,11 +167,6 @@ waffle white black asian indian, over(agecat) normvar(total) note("")
 
 <img src="/figures/waffle3.png" width="100%">
 
-```
-waffle white black asian indian, over(agecat) normvar(total) note("") showpct
-```
-
-<img src="/figures/waffle3_1.png" width="100%">
 
 
 We can also normalize each block local percentages of each category:
@@ -181,6 +176,20 @@ waffle white black asian indian, over(agecat) percent note("")
 ```
 
 <img src="/figures/waffle4.png" width="100%">
+
+
+```
+waffle white black asian indian, over(agecat) percent note("") showpct
+```
+
+<img src="/figures/waffle4_1.png" width="100%">
+
+```
+waffle white black asian indian, over(agecat) percent note("") noval
+```
+
+<img src="/figures/waffle4_2.png" width="100%">
+
 
 And change the color palettes:
 
@@ -351,8 +360,13 @@ waffle y_ , by(groups) over(agecat) normvar(normvar) note("") showpct
 Please open an [issue](https://github.com/asjadnaqvi/stata-waffle/issues) to report errors, feature enhancements, and/or other requests. 
 
 
+
 ## Change log
 
+**v1.23 (18 Oct 2024)**
+- Added `noval` to hide values. Especially useful if `percent` or `showpct` are used.
+- Added `wrap` to wrap labels. Requires the latest version of the [graphfunctions](https://github.com/asjadnaqvi/stata-graphfunctions).
+- Minor cleanups.
 
 **v1.22 (27 Aug 2024)**
 - Fixed a bug where labels were not passing correctly under certain conditions.
@@ -377,7 +391,6 @@ Please open an [issue](https://github.com/asjadnaqvi/stata-waffle/issues) to rep
 - Rerelease with reworked code. This version is still beta.
 - Allows long and wide data forms.
 - More flexibility with colors, markers, sizes, placements.
-
 
 **v1.0 (01 Mar 2022)**
 - First release
