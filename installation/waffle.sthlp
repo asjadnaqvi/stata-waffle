@@ -51,6 +51,8 @@ This option might still evolve to better fit user cases.{p_end}
 
 {p2coldent : {opt format(fmt)}}Format the values displayed. Defaults are {opt format(%15.0fc)} and {opt format(%6.2f)} if the {opt showpct} option is specified.{p_end}
 
+{p2coldent : {opt wrap(num)}}Wrap the labels after a number of characters. Word boundaries are respected.{p_end}
+
 {p2coldent : {opt palette(name)}}Color name is any named scheme defined in the {stata help colorpalette:colorpalette} package. Default is {stata colorpalette tableau:{it:tableau}}.
 The {opt over()} option shows colors.{p_end}
 
