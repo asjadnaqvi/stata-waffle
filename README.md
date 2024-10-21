@@ -20,7 +20,7 @@ The package is still beta and is being constantly improved. It might still be mi
 
 The package can be installed via SSC or GitHub. The GitHub version, *might* be more recent due to bug fixes, feature updates etc, and *may* contain syntax improvements and changes in *default* values. See version numbers below. Eventually the GitHub version is published on SSC.
 
-The SSC version (**v1.21**):
+The SSC version (**v1.23**):
 ```
 ssc install waffle, replace
 ```
