@@ -1,4 +1,4 @@
-*! waffle v1.22 (18 Oct 2024)
+*! waffle v1.23 (18 Oct 2024)
 *! Asjad Naqvi and Jared Colston
 
 * v1.23 (18 Oct 2024): Added `noval' to remove the totals. Added `wrap()` for label wrapping.
